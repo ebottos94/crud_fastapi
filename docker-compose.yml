@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: nax_db
+    image: postgres
+    ports:
+      - '6543:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  backend:
+    build: 
+      context: ./backend
+    depends_on:
+      - postgres
+    command: sh -c "alembic upgrade head && 
+                    fastapi dev main.py --host 0.0.0.0 --port 8000"
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/code
+
+volumes:
+  postgres_data: {}
