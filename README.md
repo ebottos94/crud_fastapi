@@ -1,7 +1,9 @@
 # Run project
 
-```
-docker-compose up
+```sh
+docker-compose up -d
+
+docker-compose exec backend alembic upgrade head
 ```
 
 # Description
